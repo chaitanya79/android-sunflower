@@ -1,0 +1,78 @@
+package com.webile.cracker;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+
+public class CrackerAnimationActivity extends Activity {
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.main);
+        CrackerView crackerView = new CrackerView(this);
+        setContentView(crackerView);
+    }
+    
+    class CrackerView extends View {
+
+    	Paint vertexPaint;
+    	int counter;
+    	
+    	Bitmap fireIcon;
+    	//animation velocity = 200px / second.
+    	public CrackerView(Context context) {
+    		super(context);
+    		fireIcon = BitmapFactory.decodeResource(getResources(), R.drawable.fire);
+    		vertexPaint = new Paint();
+    		vertexPaint.setAntiAlias(true);
+    		vertexPaint.setColor(0xFF66009A);
+    		vertexPaint.setStyle(Paint.Style.STROKE);
+    		vertexPaint.setStrokeJoin(Paint.Join.ROUND);
+    		vertexPaint.setStrokeCap(Paint.Cap.ROUND);
+    		vertexPaint.setStrokeWidth(2);
+    	}
+
+    	@Override
+    	protected void onDraw(Canvas canvas) {
+    		super.onDraw(canvas);
+
+    		int endX = 400 - 8*counter;
+    		canvas.drawLine(100, 100, endX, 100, vertexPaint);
+    		canvas.drawBitmap(fireIcon, endX-6, 100-12, null);
+    		if(endX > 100)
+    		mHandler.postDelayed(new Runnable() {
+    			
+    			@Override
+    			public void run() {
+    				// TODO Auto-generated method stub
+    				counter++;
+    				invalidate();
+    			}
+    		}, 1000/25);
+    	}
+    	Handler mHandler = new Handler();
+    	
+    	/**
+    	 * Invoke this method to animate the line.
+    	 */
+    	public void lightCracker() {
+    		
+    		counter = 0;
+    		invalidate();
+    	}
+    	
+    	private class Line {
+    		int startX, startY;
+    		int endX, endY;
+    		
+    		
+    	}
+    }
+}
